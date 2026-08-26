@@ -34,7 +34,7 @@ The are no contributors for this project.
 
 ### Supported Operating Systems
 
-{% for operatingSystem in software_application.operating_system %}- {{operating_system}}
+{% for operating_system in software_application.operating_system %}- {{operating_system}}
 {% endfor %}
 ### Requirements
 
