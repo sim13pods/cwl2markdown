@@ -247,7 +247,7 @@ def cwl2markdown(context: TranspilerContext, options: CWL2MarkdownOptions) -> No
         for workflow in context.get_processes_by_type(
             Workflow, [context.process_id] if context.process_id else None
         ):
-            target: Path = Path(options.output, f"{workflow}.md")
+            target: Path = Path(options.output, f"{workflow.id}.md")
             logger.info(f"Rendering Markdown documentation to {target.absolute()}...")
 
             with target.open("w") as output_stream:
