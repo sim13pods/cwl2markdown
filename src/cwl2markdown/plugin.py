@@ -36,8 +36,6 @@ from transpiler_mate.api import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
-
     from transpiler_mate.api import TranspilerContext
 
 # START custom built-in functions to simplify the CWL rendering
@@ -246,38 +244,9 @@ def cwl2markdown(context: TranspilerContext, options: CWL2MarkdownOptions) -> No
     try:
         options.output.mkdir(parents=True, exist_ok=True)
 
-        wf_ids: Iterable[str] = (
-            [context.process_id] if context.process_id else context.document.keys()
-        )
-
-        workflows: list[str] = []
-
-        for wf_id in wf_ids:
-            process: Process | None = context.document.get(wf_id)
-
-            logger.debug(f"* Checking '{wf_id}'...")
-
-            if not process:
-                logger.warning(
-                    f"  '{wf_id}' does not exist in {context.source} CWL document, discarding."
-                )
-                continue
-
-            if not isinstance(process, Workflow):
-                logger.warning(
-                    f"  '{process.id}' is not a Workflow instance, discarding"
-                )
-                continue
-
-            logger.debug(f"  Processing '{process.id}'")
-            workflows.append(process.id)
-
-        if not workflows:
-            raise PluginExecutionError(
-                f"No Workflow(s) found in input {context.source} CWL document"
-            )
-
-        for workflow in workflows:
+        for workflow in context.get_processes_by_type(
+            Workflow, [context.process_id] if context.process_id else None
+        ):
             target: Path = Path(options.output, f"{workflow}.md")
             logger.info(f"Rendering Markdown documentation to {target.absolute()}...")
 
@@ -289,7 +258,7 @@ def cwl2markdown(context: TranspilerContext, options: CWL2MarkdownOptions) -> No
                             timespec="milliseconds"
                         ),
                         software_application=context.metadata,
-                        workflow=context.document[workflow],
+                        workflow=workflow,
                         index=context.document,
                     )
                 )
