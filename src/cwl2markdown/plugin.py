@@ -217,14 +217,6 @@ class CWL2MarkdownOptions(BaseModel):
         Path, Field(default=Path("./"), description="The output directory path")
     ]
 
-    code_repository: Annotated[
-        str | None,
-        Field(
-            default=None,
-            description="The (SVN, GitHub, CodePlex, ...) code repository URL",
-        ),
-    ]
-
 
 @transpiler_plugin(
     name="cwl2markdown",
