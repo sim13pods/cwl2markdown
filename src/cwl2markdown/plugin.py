@@ -289,7 +289,7 @@ def cwl2markdown(context: TranspilerContext, options: CWL2MarkdownOptions) -> No
                             timespec="milliseconds"
                         ),
                         software_application=context.metadata,
-                        workflow=workflow,
+                        workflow=context.document[workflow],
                         index=context.document,
                     )
                 )
