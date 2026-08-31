@@ -39,7 +39,7 @@ nav:
       - Architecture: explanation/architecture.md
 
 theme:
-  name: material
+  name: readthedocs
   features:
     - navigation.sections
     - navigation.indexes
